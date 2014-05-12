@@ -2075,8 +2075,7 @@ class Home:
             return _genericMessage("Update Failed", "Update wasn't successful, not restarting. Check your log for more information.")
 
     @cherrypy.expose
-    def displayShow(self, show=None):
-
+    def displayShow(self, show=None, season=None):
         if show == None:
             return _genericMessage("Error", "Invalid show ID")
         else:
@@ -2086,15 +2085,20 @@ class Home:
                 return _genericMessage("Error", "Show not in show list")
 
         myDB = db.DBConnection()
-
-        seasonResults = myDB.select(
-            "SELECT DISTINCT season FROM tv_episodes WHERE showid = ? ORDER BY season desc",
-            [showObj.tvdbid]
-        )
+        if season:
+            seasonResults = myDB.select(
+                "SELECT DISTINCT season FROM tv_episodes WHERE showid = ? AND season = ? ORDER BY season desc",
+                [showObj.tvdbid, season]
+            )
+        else:
+            seasonResults = myDB.select(
+                "SELECT DISTINCT season FROM tv_episodes WHERE showid = ? ORDER BY season desc",
+                [showObj.tvdbid]
+            )
 
         sqlResults = myDB.select(
-            "SELECT * FROM tv_episodes WHERE showid = ? ORDER BY season DESC, episode DESC",
-            [showObj.tvdbid]
+            "SELECT * FROM tv_episodes WHERE showid = ? AND season = ? ORDER BY season DESC, episode DESC",
+            [showObj.tvdbid, season]
         )
 
         t = PageTemplate(file="displayShow.tmpl")
