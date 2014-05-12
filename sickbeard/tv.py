@@ -736,6 +736,21 @@ class TVShow(object):
 
         # verify that we don't have it in the DB somehow (ep mismatch)
 
+    def getSeasonList(self):
+        myDB = db.DBConnection()
+        query = "SELECT DISTINCT season FROM tv_episodes WHERE showid = ? ORDER BY season DESC"
+        params = [self.tvdbid]
+        sqlResults = myDB.select(query, params)
+
+        if sqlResults == None or len(sqlResults) == 0:
+            return []
+        else:
+            seasonList = [row['season'] for row in sqlResults]
+            if 0 in seasonList:
+                seasonList.remove(0)
+                seasonList.append('specials')
+            return seasonList
+
     def deleteShow(self):
 
         myDB = db.DBConnection()

@@ -982,9 +982,20 @@ td.tvShow a {
   font-size: 14px;
   color: #333;
   text-decoration: none;
-  display: block;
+  //display: block;
   width: 100%;
 }
+td span.season a {
+  font-size:12px;
+  font-weight: normal;
+  text-decoration: underline;
+  margin-right: 5px;
+}
+
+td span.season a:hover {
+  background-color: #cfcccf !important;
+}
+
 td.tvShow:hover a {
   color:#000;
 }
