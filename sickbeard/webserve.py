@@ -2096,10 +2096,16 @@ class Home:
                 [showObj.tvdbid]
             )
 
-        sqlResults = myDB.select(
-            "SELECT * FROM tv_episodes WHERE showid = ? AND season = ? ORDER BY season DESC, episode DESC",
-            [showObj.tvdbid, season]
-        )
+        if season:
+            sqlResults = myDB.select(
+                "SELECT * FROM tv_episodes WHERE showid = ? AND season = ? ORDER BY season DESC, episode DESC",
+                [showObj.tvdbid, season]
+            )
+        else:
+            sqlResults = myDB.select(
+                "SELECT * FROM tv_episodes WHERE showid = ? ORDER BY season DESC, episode DESC",
+                [showObj.tvdbid]
+            )
 
         t = PageTemplate(file="displayShow.tmpl")
         t.submenu = [ { 'title': 'Edit', 'path': 'home/editShow?show=%d' % showObj.tvdbid } ]
